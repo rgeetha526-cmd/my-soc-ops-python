@@ -12,12 +12,18 @@ body {
 
 /* Tailwind-like utility classes */
 .h-full { height: 100%; }
+.h-32 { height: 8rem; }
+.h-12 { height: 3rem; }
 .min-h-full { min-height: 100%; }
 .w-full { width: 100%; }
 .w-16 { width: 4rem; }
+.w-32 { width: 8rem; }
+.w-12 { width: 3rem; }
 .max-w-sm { max-width: 24rem; }
 .max-w-md { max-width: 28rem; }
 .max-w-xs { max-width: 20rem; }
+.max-w-2xl { max-width: 42rem; }
+.max-w-4xl { max-width: 56rem; }
 
 .flex { display: flex; }
 .flex-col { flex-direction: column; }
@@ -180,4 +186,37 @@ button:disabled {
 
 .animate-\[bounce_0\.5s_ease-out\] {
     animation: bounce 0.5s ease-out;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.fade-in {
+    animation: fadeIn 0.8s ease-out;
+}
+
+.fade-in-delay-1 {
+    animation: fadeIn 0.8s ease-out 0.2s both;
+}
+
+.fade-in-delay-2 {
+    animation: fadeIn 0.8s ease-out 0.4s both;
+}
+
+.fade-in-delay-3 {
+    animation: fadeIn 0.8s ease-out 0.6s both;
+}
+
+@media (min-width: 768px) {
+    .md\:grid-cols-3 {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
 }
