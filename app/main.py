@@ -10,13 +10,13 @@ from starlette.middleware.sessions import SessionMiddleware
 from app.game_service import GameSession, get_session
 from app.models import GameState
 
-BASE_DIR = Path(__file__).resolve().parent
+BASE_DIR: Path = Path(__file__).resolve().parent
 
-app = FastAPI(title="Soc Ops - Social Bingo")
+app: FastAPI = FastAPI(title="Soc Ops - Social Bingo")
 app.add_middleware(SessionMiddleware, secret_key="soc-ops-secret-key")
 app.mount("/static", StaticFiles(directory=BASE_DIR / "static"), name="static")
 
-templates = Jinja2Templates(directory=BASE_DIR / "templates")
+templates: Jinja2Templates = Jinja2Templates(directory=BASE_DIR / "templates")
 
 
 def _get_game_session(request: Request) -> GameSession:
