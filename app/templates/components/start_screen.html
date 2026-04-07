@@ -79,13 +79,28 @@
 
     <!-- CTA Button -->
     <div class="fade-in-delay-3">
-        <button
-            hx-post="/start"
-            hx-target="#game-container"
-            hx-swap="outerHTML"
-            class="bg-accent text-white font-semibold py-4 px-8 rounded-lg text-lg hover:shadow-xl transition-all duration-200">
-            Start Game
-        </button>
+        <form hx-post="/start" hx-target="#game-container" hx-swap="outerHTML" class="flex flex-col items-center space-y-4">
+            <div class="flex flex-col space-y-2">
+                <label class="text-sm font-medium text-gray-700">Choose Game Mode:</label>
+                <div class="flex flex-col space-y-2">
+                    <label class="flex items-center">
+                        <input type="radio" name="mode" value="bingo" checked class="mr-2">
+                        <span class="text-sm">Classic Bingo - Create your own card</span>
+                    </label>
+                    <label class="flex items-center">
+                        <input type="radio" name="mode" value="scavenger_hunt" class="mr-2">
+                        <span class="text-sm">Scavenger Hunt - Find all matches</span>
+                    </label>
+                    <label class="flex items-center">
+                        <input type="radio" name="mode" value="card_deck_shuffle" class="mr-2">
+                        <span class="text-sm">Card Deck Shuffle - Get a random card</span>
+                    </label>
+                </div>
+            </div>
+            <button type="submit" class="bg-accent text-white font-semibold py-4 px-8 rounded-lg text-lg hover:shadow-xl transition-all duration-200">
+                Start Game
+            </button>
+        </form>
     </div>
 </div>
 </div>

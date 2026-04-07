@@ -15,7 +15,13 @@
 
     <!-- Instructions -->
     <p class="text-center text-gray-600 text-sm py-3 px-4 bg-white mx-4 rounded-lg shadow-sm">
+        {% if session.mode == 'scavenger_hunt' %}
+        Scavenger hunt mode: Check off items as you find matches. Progress: {{ session.progress }}
+        {% elif session.mode == 'card_deck_shuffle' %}
+        Card Deck Shuffle: Find someone who matches your card to win!
+        {% else %}
         Tap a square when you find someone who matches it.
+        {% endif %}
     </p>
 
     <!-- Bingo indicator -->

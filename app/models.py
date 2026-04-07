@@ -10,6 +10,12 @@ class GameState(StrEnum):
     BINGO = "bingo"
 
 
+class GameMode(StrEnum):
+    BINGO = "bingo"
+    SCAVENGER_HUNT = "scavenger_hunt"
+    CARD_DECK_SHUFFLE = "card_deck_shuffle"
+
+
 class BingoSquareData(BaseModel):
     """A single square on the bingo board."""
 
@@ -26,6 +32,6 @@ class BingoLine(BaseModel):
 
     model_config = ConfigDict(frozen=True)
 
-    type: Literal["row", "column", "diagonal"] = "row"
+    type: Literal["row", "column", "diagonal", "all", "center"] = "row"
     index: int = 0
     squares: list[int] = []

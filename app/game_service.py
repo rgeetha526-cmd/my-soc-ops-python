@@ -3,10 +3,9 @@ from dataclasses import dataclass, field
 from app.game_logic import (
     check_bingo,
     generate_board,
-    get_winning_square_ids,
     toggle_square,
 )
-from app.models import BingoLine, BingoSquareData, GameState
+from app.models import BingoLine, BingoSquareData, GameMode, GameState
 
 
 @dataclass
@@ -17,20 +16,23 @@ class GameSession:
     board: list[BingoSquareData] = field(default_factory=list)
     winning_line: BingoLine | None = None
     show_bingo_modal: bool = False
+    mode: GameMode = GameMode.BINGO
 
     @property
-    def winning_square_ids(self) -> set[int]:
-        return get_winning_square_ids(self.winning_line)
+    def progress(self) -> str:
+        marked = sum(1 for sq in self.board if sq.is_marked)
+        return f"{marked}/{len(self.board)}"
 
     @property
     def has_bingo(self) -> bool:
         return self.game_state == GameState.BINGO
 
-    def start_game(self) -> None:
-        self.board = generate_board()
+    def start_game(self, mode: GameMode = GameMode.BINGO) -> None:
+        self.board = generate_board(mode)
         self.winning_line = None
         self.game_state = GameState.PLAYING
         self.show_bingo_modal = False
+        self.mode = mode
 
     def handle_square_click(self, square_id: int) -> None:
         if self.game_state != GameState.PLAYING:
@@ -38,7 +40,7 @@ class GameSession:
         self.board = toggle_square(self.board, square_id)
 
         if self.winning_line is None:
-            bingo = check_bingo(self.board)
+            bingo = check_bingo(self.board, self.mode)
             if bingo is not None:
                 self.winning_line = bingo
                 self.game_state = GameState.BINGO

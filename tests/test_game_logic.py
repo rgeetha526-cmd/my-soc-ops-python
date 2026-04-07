@@ -6,7 +6,7 @@ from app.game_logic import (
     get_winning_square_ids,
     toggle_square,
 )
-from app.models import BingoLine, BingoSquareData
+from app.models import BingoLine, BingoSquareData, GameMode
 
 
 class TestGenerateBoard:
@@ -120,6 +120,36 @@ class TestCheckBingo:
         board = self._make_board({0, 1, 2, 3})
         assert check_bingo(board) is None
 
+    def test_scavenger_hunt_win_all_marked(self) -> None:
+        board = self._make_board(set(range(25)))  # all marked
+        result = check_bingo(board, mode=GameMode.SCAVENGER_HUNT)
+        assert result is not None
+        assert result.type == "all"
+        assert result.squares == list(range(25))
+
+    def test_scavenger_hunt_partial_no_win(self) -> None:
+        board = self._make_board({0, 1, 2, 3, 4})
+        result = check_bingo(board, mode=GameMode.SCAVENGER_HUNT)
+        assert result is None
+
+    def test_card_deck_shuffle_win_center_marked(self) -> None:
+        board = generate_board(GameMode.CARD_DECK_SHUFFLE)
+        # Mark the center square
+        board = toggle_square(board, 12)
+        result = check_bingo(board, mode=GameMode.CARD_DECK_SHUFFLE)
+        assert result is not None
+        assert result.type == "center"
+        assert result.squares == [12]
+
+    def test_card_deck_shuffle_center_not_marked_no_win(self) -> None:
+        board = generate_board(GameMode.CARD_DECK_SHUFFLE)
+        # Mark some other squares but not center
+        board = toggle_square(board, 0)
+        board = toggle_square(board, 1)
+        board = toggle_square(board, 2)
+        result = check_bingo(board, mode=GameMode.CARD_DECK_SHUFFLE)
+        assert result is None
+
 
 class TestGetWinningSquareIds:
     def test_none_line_returns_empty_set(self) -> None:
@@ -128,3 +158,10 @@ class TestGetWinningSquareIds:
     def test_returns_square_ids(self) -> None:
         line = BingoLine(type="row", index=0, squares=[0, 1, 2, 3, 4])
         assert get_winning_square_ids(line) == {0, 1, 2, 3, 4}
+
+
+class TestGameMode:
+    def test_game_mode_enum_values(self) -> None:
+        assert GameMode.BINGO == "bingo"
+        assert GameMode.SCAVENGER_HUNT == "scavenger_hunt"
+        assert GameMode.CARD_DECK_SHUFFLE == "card_deck_shuffle"
